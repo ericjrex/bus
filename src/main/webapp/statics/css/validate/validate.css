@@ -1,0 +1,135 @@
+@CHARSET "UTF-8";
+
+.head {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	border-bottom: 1px solid #e9e9e9;
+	padding-left: 15px;
+	color: #498949;
+	background: #E8FFE8;
+}
+
+.title {
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 24px;
+	font-family: arial;
+}
+
+.content {
+	padding: 1px;
+	vertical-align: top;
+	background: #fcfcfc;
+	margin: 0px;
+}
+
+li.item {
+	padding-left: 20px;
+}
+
+li.item-1 {
+	background: url('images/success.gif') no-repeat;
+}
+
+li .help {
+	background: url('images/help.png') no-repeat;
+	width: 16px;
+}
+
+li.item-2 {
+	background: url('images/error.gif') no-repeat;
+}
+
+li.item-3 {
+	background: url('images/wraing.gif') no-repeat;
+}
+
+.validateMessageCategory {
+	margin-bottom: 3px;
+	border: #cecece 1px solid;
+}
+
+.validateMessageCategory ul {
+	list-style: none;
+}
+
+.cur-point {
+	background: url('images/point.gif') no-repeat;
+	left: 14px;
+	height: 16px;
+	width: 16px;
+	position: absolute;
+	z-index: 999999;
+	height: 16px;
+}
+
+.row-validate-success {
+	background: url('images/success2.gif') no-repeat;
+	left: 14px;
+	height: 16px;
+	width: 16px;
+	position: absolute;
+	z-index: 999990;
+	height: 16px;
+}
+
+/**发布结果状态*/
+.publish_success {
+	background: url('images/success.gif') no-repeat;
+	height: 16px;
+	width: 16px;
+}
+
+.publish_error {
+	background: url('images/error.gif') no-repeat;
+	height: 16px;
+	width: 16px;
+}
+
+.row-validate-error {
+	background: url('images/error2.gif') no-repeat;
+	left: 14px;
+	height: 16px;
+	width: 16px;
+	position: absolute;
+	z-index: 999990;
+	height: 16px;
+}
+
+.u-progress {
+	
+}
+
+.u-progress .percent {
+	font-size: 10px;
+	font-family: Arial;
+	font-weight: bold;
+	text-align: right;
+	color: red;
+	width: 30px;
+	overflow: hidden;
+}
+
+.u-progress .img {
+	width: 0%;
+	background: url('images/progress-mask.gif') no-repeat top right;
+	width: 16px;
+	height: 6px;
+}
+
+.u-progress .bar {
+	background: #fff;
+	border: 1px solid #aaa;
+	padding: 1px;
+}
+
+.u-progress .run {
+	background: green;
+	width: 0%;
+	height: 5px;
+}
+
+.u-progress .img,.u-progress .bar,.u-progress .run {
+	font-size: 0px;
+	overflow: hidden;
+}

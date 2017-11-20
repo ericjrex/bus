@@ -1,0 +1,42 @@
+@charset "utf-8";
+/* CSS Document */
+.toolbar {
+	text-align: right;
+	vertical-align: middle;
+	font-size: 13px;
+	padding-right: 10px;
+}
+.list-title {
+	text-align: center;
+	font-size: 25px;
+	font-family: 黑体;
+	height: 55px;
+	vertical-align: top;
+	padding-top: 5px;
+}
+.list-tsDate {
+	text-align: right;
+	padding-right: 25px;
+	padding-bottom: 5px;
+	font-size: 12px;
+	font-family: 宋体;
+}
+.search {
+	text-align: center;
+	height: 55px;
+}
+.list-head {
+	text-align: center;
+	font-size: 15px;
+	background-color: #AEEEEE;
+	height: 35px;
+}
+.list-text {
+	text-align: center;
+	font-size: 13px;
+	height: 30px;
+}
+.report_grid {
+	padding-left: 20px;
+	padding-right: 20px;
+}

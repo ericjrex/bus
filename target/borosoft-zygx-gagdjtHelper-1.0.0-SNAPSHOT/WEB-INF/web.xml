@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+
+	<welcome-file-list>
+		<welcome-file>/index.html</welcome-file>
+	</welcome-file-list>
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>borosoft-zygx-gagdjtHelper.app</param-value>
+	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/spring.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>classpath:log4j.properties</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+
+		<!-- 需要共享session的时候打开 -->
+	<filter>
+		<filter-name>springSessionRepositoryFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSessionRepositoryFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<description>加上P3P实现 cookie 跨域 </description>
+		<filter-name>p3pFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>p3pFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<description>编码</description>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>characterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<description>参数</description>
+		<filter-name>requestParameterFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>requestParameterFilter</filter-name>
+		<url-pattern>/</url-pattern>
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<description>绑定上下文</description>
+		<filter-name>requestContextFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>requestContextFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- {{单点登录 -->
+	<!-- 同步CAS内部维护的SESSION映射 -->
+	<listener>
+		<listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
+	</listener>
+	<!-- 处理CAS服务器的登陆/退出请求服务,负责同步CAS内部维护的SESSION映射,包括创建本系统的SESSION/注销本系统的SESSION -->
+	<filter>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<!-- 需要共享session 的时候打开 -->
+		<filter-class>com.borosoft.framework.cas.client.session.RedisSingleSignOutFilter</filter-class>
+		<!-- <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class> -->
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- CAS身份认证 -->
+
+
+	<!-- CAS身份认证 -->
+	<!-- 对Ticket做正确性校验(若不传Ticket则不会做验证直接通过),如果验证通过,创建新的Assertion设置到SESSION中 -->
+	<filter>
+		<filter-name>CAS Validation Filter</filter-name>
+		<filter-class>com.borosoft.framework.cas.sso.CustomerCas20ProxyReceivingTicketValidationFilter</filter-class>
+		<!--<filter-class>org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter</filter-class> -->
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/</url-pattern>
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+
+	<!-- 通过条件:1,已被CAS标记登陆过(SESSION中是否存在Assertion);或2,请求的URL必须专递Ticket; -->
+	<!-- 不通过时则跳转到CAS登陆 -->
+	<filter>
+		<filter-name>CASFilter</filter-name>
+		<filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CASFilter</filter-name>
+		<url-pattern>/</url-pattern>
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+
+	<!-- 单点登陆}} -->
+
+	<filter>
+		<description>认证过滤器</description>
+		<filter-name>authenticationFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>authenticationFilter</filter-name>
+		<url-pattern>/</url-pattern>
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>com.borosoft.framework.spring.SpringDispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.cas</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Heartbeat</servlet-name>
+		<servlet-class>com.borosoft.framework.init.web.HeartbeatServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Heartbeat</servlet-name>
+		<url-pattern>/heartbeat.html</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 快逸报表配置 -->
+	<servlet>
+		<servlet-name>reportServlet</servlet-name>
+		<servlet-class>com.runqian.report4.view.ReportServlet</servlet-class>
+		<init-param>
+			<param-name>configFile</param-name>
+			<param-value>/WEB-INF/reportConfig.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>reportServlet</servlet-name>
+		<url-pattern>/reportServlet</url-pattern>
+	</servlet-mapping>
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/WEB-INF/errors/403.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/errors/404.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/errors/500.jsp</location>
+	</error-page>
+	
+</web-app>

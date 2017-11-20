@@ -1,0 +1,393 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.borosoft.gagdjtHelper</groupId>
+  <artifactId>borosoft-zygx-gagdjtHelper</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+  
+  <properties>
+		<!-- 发布�? -->
+		<repository.id>releases</repository.id>
+		<repository.url>http://192.168.1.2:8081/nexus/content/repositories/releases</repository.url>
+
+		<!-- 快照�? -->
+		<snapshotRepository.id>snapshots</snapshotRepository.id>
+		<snapshotRepository.url>http://192.168.1.2:8081/nexus/content/repositories/snapshots</snapshotRepository.url>
+
+		<rmp.version>1.0.9-SNAPSHOT</rmp.version>
+		<data.version>1.0.9-SNAPSHOT</data.version>
+		<mware.version>1.1.0-SNAPSHOT</mware.version>
+		<plugin.version>1.0.5-RELEASE</plugin.version>
+		<interface.version>1.0.2-SNAPSHOT</interface.version>
+		<manager-client.version>1.0-RELEASE</manager-client.version>
+		<platform.version>4.0.5-SNAPSHOT</platform.version>
+		<framework.version>2.0.7-SNAPSHOT</framework.version>
+		<bfs.version>2.0.0-RELEASE</bfs.version>
+		<xylhcj.version>1.0.0-SNAPSHOT</xylhcj.version>
+		<druid.version>1.0.27</druid.version>
+
+		<jackson.version>2.4.6</jackson.version>
+		<poi.version>3.8</poi.version>
+		<ant.version>1.8.4</ant.version>
+		<slf4j-api.version>1.6.1</slf4j-api.version>
+		<commons-beanutils.version>1.8.3</commons-beanutils.version>
+		<spring.version>4.1.9.RELEASE</spring.version>
+		<commons-lang.version>2.6</commons-lang.version>
+		<commons-dbcp.version>1.4</commons-dbcp.version>
+		<servlet.version>3.1.0</servlet.version>
+		<jstl.version>1.2</jstl.version>
+		<jsp-api.version>2.0</jsp-api.version>
+		<G4B.version>1.0</G4B.version>
+		<sign.version>1.0</sign.version>
+		<bcpkix-jdk15on.version>1.48</bcpkix-jdk15on.version>
+		<bcprov-jdk15on.version>1.51</bcprov-jdk15on.version>
+		<kaptcha.version>2.3.2</kaptcha.version>
+		<commons-fileupload.version>1.2.1</commons-fileupload.version>
+		<metadata-extractor.version>2.8.1</metadata-extractor.version>
+		<runqian-report.version>4.0</runqian-report.version>
+		<poi2.version>1.0</poi2.version>
+		<itext2_rq.version>1.0</itext2_rq.version>
+		<taglibs.standard.version>1.1.2</taglibs.standard.version>
+
+	</properties>
+
+	<dependencies>
+		<!-- test -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>${jsp-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- 基础平台 -->
+		<dependency>
+			<groupId>com.borosoft</groupId>
+			<artifactId>platform-framework</artifactId>
+			<version>${platform.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft</groupId>
+			<artifactId>platform-rest-api</artifactId>
+			<version>${platform.version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.borosoft.data</groupId>
+			<artifactId>borosoft-data-sign</artifactId>
+			<version>${data.version}</version>
+		</dependency>
+		
+		<!-- {{framework -->
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-core</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-web</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-cache</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-barcode</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-cache</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-io</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-web-easyui</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-context</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-cas</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-configuration</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-log</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-json-jackson</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-hessian</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-init</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-sms</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-wps</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.framework</groupId>
+			<artifactId>borosoft-framework-file-upload</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+
+		<!-- {{resource-rmp -->
+		<dependency>
+			<groupId>com.borosoft.rmp</groupId>
+			<artifactId>borosoft-bigdata-Client</artifactId>
+			<version>${rmp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.rmp</groupId>
+			<artifactId>borosoft-rmp-query</artifactId>
+			<version>${rmp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.rmp</groupId>
+			<artifactId>borosoft-entity-dirInfo</artifactId>
+			<version>${rmp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.rmp</groupId>
+			<artifactId>borosoft-entity-dirPlugIn</artifactId>
+			<version>${rmp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.rmp</groupId>
+			<artifactId>borosoft-entity-subject</artifactId>
+			<version>${rmp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.rmp</groupId>
+			<artifactId>borosoft-resource-commons</artifactId>
+			<version>${rmp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.rmp</groupId>
+			<artifactId>borosoft-entity-interface</artifactId>
+			<version>${rmp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.rmp</groupId>
+			<artifactId>borosoft-entity-dirAuth</artifactId>
+			<version>${rmp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.rmp</groupId>
+			<artifactId>borosoft-rmp-entityquery</artifactId>
+			<version>${rmp.version}</version>
+		</dependency>
+		<!-- resource-rmp}} -->
+
+		<dependency>
+			<groupId>com.borosoft.plugin</groupId>
+			<artifactId>borosoft-plugin-public</artifactId>
+			<version>${plugin.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstl.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons-fileupload.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>${commons-dbcp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.runqian.report</groupId>
+			<artifactId>runqian-report</artifactId>
+			<version>${runqian-report.version}</version>
+		</dependency>
+
+		<dependency>
+		  <groupId>com.runqian.report</groupId>
+		  <artifactId>jai-codec-1.1.3</artifactId>
+		  <version>1.1.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.runqian.report</groupId>
+			<artifactId>poi2</artifactId>
+			<version>${poi2.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.runqian.report</groupId>
+			<artifactId>itext2_rq</artifactId>
+			<version>${itext2_rq.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.data</groupId>
+			<artifactId>borosoft-data-datainter</artifactId>
+			<version>${data.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.interface</groupId>
+			<artifactId>borosoft-interface-client</artifactId>
+			<version>${interface.version}</version>
+		</dependency>
+
+		<!-- {{resource-data -->
+		<dependency>
+			<groupId>com.borosoft.data</groupId>
+			<artifactId>borosoft-component-query</artifactId>
+			<version>${data.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.data</groupId>
+			<artifactId>borosoft-data-component</artifactId>
+			<version>${data.version}</version>
+		</dependency>
+		<!-- resource-data}} -->
+
+		<dependency>
+			<groupId>com.borosoft.mware</groupId>
+			<artifactId>borosoft-mware-queryRule</artifactId>
+			<version>${mware.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.mware</groupId>
+			<artifactId>borosoft-mware-entity</artifactId>
+			<version>${mware.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.borosoft.mware</groupId>
+			<artifactId>borosoft-mware-middleware</artifactId>
+			<version>${mware.version}</version>
+
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet.jsp</groupId>
+					<artifactId>jsp-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>${druid.version}</version>
+		</dependency>
+
+	</dependencies>
+
+
+	<distributionManagement>
+		<repository>
+			<id>${repository.id}</id>
+			<url>${repository.url}</url>
+		</repository>
+		<snapshotRepository>
+			<id>${snapshotRepository.id}</id>
+			<url>${snapshotRepository.url}</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<attach>true</attach>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+  
+</project>

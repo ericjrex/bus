@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:context="http://www.springframework.org/schema/context" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:jms="http://www.springframework.org/schema/jms" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:oxm="http://www.springframework.org/schema/oxm" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd  
+        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd  
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd  
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd  
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd  
+        http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-3.1.xsd  
+        http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.1.xsd  
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd  
+        http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.1.xsd  
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd  
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd  
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd"
+	default-autowire="byName">
+
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
+	<!-- 描述所有注解 -->
+	<context:component-scan base-package="com.borosoft"></context:component-scan>
+	
+	<context:property-placeholder location="classpath:config/*.properties" />
+
+	<import resource="classpath:spring/spring-include.xml" />
+	
+	<!-- spring 获取bean工具类 -->
+	<bean id="beanRepository" class="com.borosoft.framework.spring.BeanRepository" />
+
+	<!-- jsr303 -->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+	</bean>
+	<bean id="methodValidationPostProcessor" class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
+		<property name="validator" ref="validator"></property>
+	</bean>
+	
+	<!-- local本地 -->
+	<!-- <bean id="localFileUploadService" class="com.borosoft.framework.io.upload.internal.LocalFileUploadService" />
+	<bean id="zygxFileUploadService" class="com.borosoft.framework.file.upload.impl.LocalFileUploadServiceImpl" >
+		<property name="fileUploadService" ref="localFileUploadService"/>
+	</bean> -->
+	<!-- BFS -->
+	<bean id="bfs" class="com.borosoft.bfs.BfsClient"/>
+	<bean id="zygxFileUploadService" class="com.borosoft.framework.file.upload.impl.BfsFileUploadServiceImpl" >
+		<property name="container" value="zygx"/>
+		<property name="bfs" ref="bfs"/>
+	</bean>
+	
+	<bean id="bfsFileUploadHolder" class="com.borosoft.gagdjthelper.photoHelper.holder.BfsFileUploadHolder" >
+		<property name="container" value="zygx"/>
+		<property name="bfs" ref="bfs"/>
+	</bean>
+	
+	<!-- 远程调用客户端 集群(LOCAL、REMOTE) -->
+	<bean class="com.borosoft.framework.hessian.client.HessianClientScannerConfigurerBest">
+		<property name="hessianType" value="#{ T(com.borosoft.framework.AppConfig).getConfig().getString('servers.hessian_type') }"></property>
+		<property name="basePackage" value="com.borosoft.platform,com.borosoft.rest,com.borosoft.serve,com.borosoft.server,com.borosoft.dirInfo,com.borosoft.mware,com.borosoft.dirPlugIn,com.borosoft.sign,com.borosoft.dirAuth,com.borosoft.queryRule,com.borosoft.subject,com.borosoft.datainter"></property>
+		<property name="annotationClass" value="com.borosoft.framework.hessian.annotation.Hessian"></property>
+	</bean>
+	
+	
+</beans>

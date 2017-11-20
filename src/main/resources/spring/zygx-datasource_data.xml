@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:context="http://www.springframework.org/schema/context" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:jms="http://www.springframework.org/schema/jms" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:oxm="http://www.springframework.org/schema/oxm" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd  
+        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd  
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd  
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd  
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd  
+        http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-3.1.xsd  
+        http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.1.xsd  
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd  
+        http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.1.xsd  
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd  
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd  
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd"
+	default-autowire="byName">
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- 业务数据操作接口 -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+	<!-- 目录数据数据源 -->
+	<bean id="dirDataDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc_data.driver}" />
+		<property name="url" value="${jdbc_data.url}" />
+		<property name="username" value="${jdbc_data.username}" />
+		<property name="password" value="${jdbc_data.password}" />
+		<property name="maxIdle" value="10"></property>
+		<property name="maxActive" value="20"></property>
+	</bean>
+
+	<!-- 资源目录数据操作工具类 -->
+	<bean id="zytgJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dirDataDataSource" />
+	</bean>
+	
+	<!-- 目录数据jdbcTemplate接口 -->
+	<bean id="dirDataJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dirDataDataSource" />
+	</bean>
+
+	<!-- 目录数据操作源 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dirDataDataSource"></property>
+		<property name="mappingLocations">
+			<list>
+				<value>classpath*:/hibernate/data/*.hbm.xml</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate_data.dialect}</prop>
+				<!-- <prop key="hibernate.show_sql">${hibernate_data.show_sql}</prop> -->
+				<prop key="hibernate.format_sql">${hibernate_data.format_sql}</prop>
+				<prop key="hibernate.default_batch_fetch_size">${hibernate_data.default_batch_fetch_size}</prop>
+				<prop key="hibernate.max_fetch_depth">${hibernate_data.max_fetch_depth}</prop>
+				<prop key="hibernate.generate_statistics">${hibernate_data.generate_statistics}</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 事务管理 -->
+	
+	<bean id="dirDataTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="dataSource" ref="dirDataDataSource"></property>
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<!-- 事务规则 -->
+	<tx:advice id="dirDataTxAdvice" transaction-manager="dirDataTransactionManager">
+		<tx:attributes>
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="select*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="query*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="count*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="is*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="has*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="execute*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="save*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="remove*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 方法注解事物 -->
+	<tx:annotation-driven transaction-manager="dirDataTransactionManager" />
+	
+	<!-- 方法扫描事物 -->
+	<aop:config>
+		<aop:pointcut id="dirDataTxPointcut" expression="execution(* com.borosoft.framework.service.HibernateService.*(..)) 
+			or execution(* com.borosoft.gagdjt..*.service..*.*(..)) or execution(* com.borosoft.middleware.service.DirDataService.*(..))" />
+		<aop:advisor advice-ref="dirDataTxAdvice" pointcut-ref="dirDataTxPointcut" order="29" />
+	</aop:config>
+	
+	<!-- DAO -->
+	<bean id="queryAction" class="com.borosoft.framework.dao.QueryAction"></bean>
+	<bean id="updateAction" class="com.borosoft.framework.dao.UpdateAction"></bean>
+	<bean id="deleteAction" class="com.borosoft.framework.dao.DeleteAction"></bean>
+	<bean id="countAction" class="com.borosoft.framework.dao.CountAction"></bean>
+
+	<bean id="dirDataHibernateDAO" class="com.borosoft.framework.dao.HibernateDAO"/>
+	<!-- 目录数据操作服务类 -->
+	<bean id="dirDataHibernateService" class="com.borosoft.framework.service.HibernateService">
+		<property name="hibernateDAO" ref="dirDataHibernateDAO"></property>
+	</bean>
+	
+	<bean id="dirDataService" class="com.borosoft.middleware.service.DirDataService">
+		<property name="hibernateDAO" ref="dirDataHibernateDAO"></property>
+	</bean>
+	
+	<!-- 用于目录映射 -->
+	<bean id="sqlWarp" class="com.borosoft.query.sqlWarp.impl.OracleSqlWarp"/>
+	<bean id="entityMappingService" class="com.borosoft.middleware.jservice.EntityMappingService"/>
+	<bean id="entityService" class="com.borosoft.entityquery.jdbc.EntityService">
+		<property name="entityMappingHolder" ref="entityMappingService"></property>
+		<property name="namedParameterJdbcTemplate" ref="zytgJdbcTemplate"></property>
+	</bean>
+	<!-- 用于hibernate映射 -->
+	<bean id="entityMappingHolder" class="com.borosoft.entityquery.dao.EntityMappingHolder">
+		<property name="hibernateDAO" ref="dirDataHibernateDAO"></property>
+	</bean>
+	<bean id="hibernateEntityService" class="com.borosoft.entityquery.jdbc.EntityService">
+		<property name="entityMappingHolder" ref="entityMappingHolder"></property>
+		<property name="namedParameterJdbcTemplate" ref="zytgJdbcTemplate"></property>
+	</bean>
+	
+	<!-- 数据库查询器 -->
+	<bean id="jdbcQuerier" class="com.borosoft.query.source.jdbc.CurrJdbcQuerier">
+		<constructor-arg name="jdbcTemplate" ref="dirDataJdbcTemplate" />
+		<constructor-arg name="sqlWarp" ref="sqlWarp"/>
+		<!-- <property name="showSql" value="true"></property> -->
+	</bean>
+
+	<!-- 大数据平台查询器（没有用到大数据平台时，就不用注入） -->
+	<!-- <bean id="bdsClient" class="com.borosoft.bdc.client.impl.BdsClientImpl">
+		<property name="addIndexApi" value="${rs.inx.addIndexApi}" />
+		<property name="delIndexApi" value="${rs.inx.delIndexApi}" />
+		<property name="queryApi" value="${rs.inx.queryApi}" />
+		<property name="countApi" value="${rs.inx.countApi}" />
+		<property name="qdeleteApi" value="${rs.inx.qdeleteApi}" />
+		<property name="saveOrUpdateApi" value="${rs.inx.saveOrUpdateApi}" />
+		<property name="userName" value="${rs.inx.userName}" />
+	</bean>
+	<bean id="bigDataQuerier" class="com.borosoft.bdc.client.BigDataQuerier">
+		<constructor-arg name="bdsClient" ref="bdsClient" />
+		<constructor-arg name="dataWarp" ref="esDataWarp"/>
+	</bean> -->
+	
+</beans>
